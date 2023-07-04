@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 16:36:16 by ycardona          #+#    #+#             */
-/*   Updated: 2023/06/29 16:35:27 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/01 16:36:46 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,44 @@
 # include <pthread.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/time.h>
 
-typedef struct philo_s
-{
-	pthread_t t;
+struct s_data;
+
+typedef struct s_philo
+{	
+	struct s_data	*data;
+	pthread_t	thr;
+	//pthread_t	monitor_philo;
+
 	int	name;
-	int	status;
+	int	alive;
+	int eating;
+	int	finished;
+	int	meals_eaten;
 	int fork_r;
 	int	fork_l;
-	int	meals_eaten;
+	u_int64_t	t_dead;
 	
+	pthread_mutex_t	*mutex_r;
+	pthread_mutex_t	*mutex_l;
+	pthread_mutex_t	mutex_philo;
 } philo_t;
 
-typedef struct data_s
+typedef struct s_data
 {
-	pthread_t		*thr;
-	pthread_mutex_t	mutex_r;
-	pthread_mutex_t	mutex_l;
-	pthread_mutex_t	mutex_init;
-	//philo_t			philo;
-
-	int				*forks;
-	int				n_philo;
-	int				n_meals;
-	int				t_eat;
-	int				t_sleep;
-	int				t_die;
-	//int				current;
+	philo_t				**philo;
+	pthread_mutex_t		**forks;
+	pthread_mutex_t		*mutex_data;
+	
+	int					n_philo;
+	int					n_meals;
+	int					n_dead;
+	int					n_finished;
+	u_int64_t			t_eat;
+	u_int64_t			t_sleep;
+	u_int64_t			t_die;
+	u_int64_t			t_start;
 
 } data_t;
 
