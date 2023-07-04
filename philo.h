@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 16:36:16 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/01 16:36:46 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:55:54 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_philo
 	int	meals_eaten;
 	int fork_r;
 	int	fork_l;
-	u_int64_t	t_dead;
+	unsigned long int	t_dead;
 	
 	pthread_mutex_t	*mutex_r;
 	pthread_mutex_t	*mutex_l;
@@ -45,16 +45,16 @@ typedef struct s_data
 {
 	philo_t				**philo;
 	pthread_mutex_t		**forks;
-	pthread_mutex_t		*mutex_data;
+	pthread_mutex_t		mutex_data;
 	
 	int					n_philo;
 	int					n_meals;
 	int					n_dead;
 	int					n_finished;
-	u_int64_t			t_eat;
-	u_int64_t			t_sleep;
-	u_int64_t			t_die;
-	u_int64_t			t_start;
+	unsigned long int			t_eat;
+	unsigned long int			t_sleep;
+	unsigned long int			t_die;
+	unsigned long int			t_start;
 
 } data_t;
 
