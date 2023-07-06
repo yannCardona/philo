@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Werror -Wextra -Wall -pthread
+CFLAGS = -Werror -Wextra -Wall -fsanitize=thread -pthread -g
 SRC = ${wildcard *.c}
 OBJ = ${SRC:.c=.o}
 
