@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/06 17:13:23 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/08 11:41:57 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,11 @@ int	init_data(int argc, char *argv[], t_data *data)
 	}
 	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
 			return (13);
+	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
+			return (14);
 	data->philos = malloc(sizeof(t_philo) * data->n_philo);
 	if (data->philos == NULL)
-		return (14);
+		return (15);
 	data->t_start = get_time();
 	return (0);
 }

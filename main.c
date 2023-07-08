@@ -6,14 +6,25 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/06 17:20:28 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/08 12:40:50 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void 	ft_free(t_data *data)
+void 	ft_exit(t_data *data)
 {
+	int i;
+
+	pthread_mutex_destroy(&data->mutex_super);
+	pthread_mutex_destroy(&data->mutex_write);
+	i = 0;
+	while(i < data->n_philo)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->philos[i].mutex_philo);
+		i++;
+	}
 	free(data->philos);
 	free(data->forks);
 	free(data);
@@ -25,10 +36,9 @@ void	*supervising(void *arg)
 	int	i;
 
 	data = (t_data *) arg;
-	while (data->n_finished != data->n_meals)
+	while (data)
 	{
 		i = 0;
-		data->n_finished = 0;
 		while (i < data->n_philo)
 		{
 			pthread_mutex_lock(&data->philos[i].mutex_philo);
@@ -37,22 +47,12 @@ void	*supervising(void *arg)
 				pthread_mutex_lock(&data->mutex_super);
 				data->n_dead++;
 				pthread_mutex_unlock(&data->mutex_super);
-				printf("%lu Philosopher %d has died \n", get_time() - data->t_start, data->philos[i].name);
+				ft_print(&data->philos[i], "die");
 				pthread_mutex_unlock(&data->philos[i].mutex_philo);
 				return (0);
 			}
 			pthread_mutex_unlock(&data->philos[i].mutex_philo);
-			pthread_mutex_lock(&data->philos[i].mutex_philo);
-			if (data->philos[i].finished == 1)
-				data->n_finished++;
-			pthread_mutex_unlock(&data->philos[i].mutex_philo);
 			i++;
-		}
-		if (data->n_finished == data->n_meals)
-		{
-			pthread_mutex_lock(&data->mutex_super);
-			data->n_dead++;
-			pthread_mutex_unlock(&data->mutex_super);
 		}
 	}
 	return (0);
@@ -80,7 +80,6 @@ int	main(int argc, char *argv[])
 	}
 	if (pthread_create(&supervisor, NULL, &supervising, (void *) data) != 0)
 		return (5);
-	
 	i = 0;
 	while(i < data->n_philo)
 	{
@@ -90,5 +89,6 @@ int	main(int argc, char *argv[])
 	}
 	if (pthread_join(supervisor, NULL) != 0)
 		return (7);
+	ft_exit(data);
 	return (0);
 }

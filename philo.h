@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/06 16:38:18 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/08 12:07:49 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data
 	t_philo				*philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		mutex_super;
+	pthread_mutex_t		mutex_write;
 
 	int					n_philo;
 	int					n_meals;
@@ -57,5 +58,8 @@ unsigned long int	get_time(void);
 int					init_data(int argc, char *argv[], t_data *data);
 int					init_philo(t_philo *philo, int i, t_data *data);
 void				*routine(void *arg);
+int					ft_strcmp(const char *s1, const char *s2);
+void				ft_print(t_philo *philo, char *action);
+int					check_super(t_data *data);
 
 #endif
