@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/10 09:49:27 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/10 22:38:45 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	init_philo(t_philo *philo, int i, t_data *data)
 	philo->t_last_meal = get_time();
 	if (pthread_mutex_init(&philo->mutex_philo, NULL) != 0)
 			return (9);
+	if (philo->name % 2 == 0)
+		usleep(1);
 	if (pthread_create(&philo->thr, NULL, &routine, (void *) philo) != 0)
 		return (10);
 	return (0);
