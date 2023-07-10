@@ -1,9 +1,9 @@
 CC = cc
-CFLAGS = -Werror -Wextra -Wall -fsanitize=thread -pthread -g
+CFLAGS = -Werror -Wextra -Wall -pthread
 SRC = ${wildcard *.c}
 OBJ = ${SRC:.c=.o}
 
-NAME = philo
+NAME = philo_bonus
 
 all: $(NAME)
 

@@ -6,31 +6,14 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/10 09:47:12 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/10 17:06:37 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-static void 	ft_exit(t_data *data)
-{
-	int i;
 
-	pthread_mutex_destroy(&data->mutex_super);
-	pthread_mutex_destroy(&data->mutex_write);
-	i = 0;
-	while(i < data->n_philo)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philos[i].mutex_philo);
-		i++;
-	}
-	free(data->philos);
-	free(data->forks);
-	free(data);
-}
-
-void	*supervising(void *arg)
+/* void	*supervising(void *arg)
 {
 	t_data	*data;
 	int	i;
@@ -57,7 +40,7 @@ void	*supervising(void *arg)
 		usleep(2);
 	}
 	return (0);
-}
+} */
 
 int	intput_checker(int argc, char *argv[])
 {
@@ -81,42 +64,18 @@ int	intput_checker(int argc, char *argv[])
 	return (0);
 }
 
-int	create_threads(t_data *data, pthread_t *supervisor)
+void	routine(t_data *data, int i)
 {
-	int i;
-	
-	i = 0;
-	while(i < data->n_philo)
-	{
-		if (init_philo(&data->philos[i], i, data) != 0)
-			return (11);
-		i++;
-	}
-	if (pthread_create(supervisor, NULL, &supervising, (void *) data) != 0)
-		return (12);
-	return (0);
-}
-
-int	join_threads(t_data *data, pthread_t supervisor)
-{
-	int	i;
-	
-	i = 0;
-	while(i < data->n_philo)
-	{
-		if (pthread_join(data->philos[i].thr, NULL) != 0)
-			return (13);
-		i++;
-	}
-	if (pthread_join(supervisor, NULL) != 0)
-		return (14);
-	return (0);
+	printf("child %d of %d \n", i, data->n_philo);	
 }
 
 int	main(int argc, char *argv[])
 {
 	t_data		*data;
-	pthread_t	supervisor;
+	//pthread_t	supervisor;
+	int			i;
+	pid_t		pid;
+	sem_t		*forks;
 
 	if (intput_checker(argc, argv) != 0)
 		return (intput_checker(argc, argv));
@@ -125,10 +84,19 @@ int	main(int argc, char *argv[])
 		return (3);
 	if (init_data(argc, argv, data) != 0)
 		return (init_data(argc, argv, data));
-	if (create_threads(data, &supervisor) != 0)
-		return (create_threads(data, &supervisor));
-	if (join_threads(data, supervisor) != 0)
-		return (join_threads(data, supervisor));
-	ft_exit(data);
+	forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			routine(data, i + 1);
+			exit(0);
+		}
+		usleep(10);
+		i++;
+	}
+	//ft_exit(data);
 	return (0);
 }
