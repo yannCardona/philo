@@ -6,13 +6,13 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/08 12:40:50 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/10 09:47:12 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void 	ft_exit(t_data *data)
+static void 	ft_exit(t_data *data)
 {
 	int i;
 
@@ -42,7 +42,7 @@ void	*supervising(void *arg)
 		while (i < data->n_philo)
 		{
 			pthread_mutex_lock(&data->philos[i].mutex_philo);
-			if (data->t_die < get_time() - data->philos[i].t_last_meal && data->philos[i].eating != 1)
+			if (data->t_die < get_time() - data->philos[i].t_last_meal)
 			{
 				pthread_mutex_lock(&data->mutex_super);
 				data->n_dead++;
@@ -54,7 +54,62 @@ void	*supervising(void *arg)
 			pthread_mutex_unlock(&data->philos[i].mutex_philo);
 			i++;
 		}
+		usleep(2);
 	}
+	return (0);
+}
+
+int	intput_checker(int argc, char *argv[])
+{
+	int	i;
+	int	j;
+	
+	if (argc < 5 || 6 < argc)
+		return (1);
+	i = 1;
+	while (i < argc)
+	{
+		j = 0;
+		while (argv[i][j] != '\0')
+		{
+			if (ft_isdigit(argv[i][j]) == 0)
+				return (2);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	create_threads(t_data *data, pthread_t *supervisor)
+{
+	int i;
+	
+	i = 0;
+	while(i < data->n_philo)
+	{
+		if (init_philo(&data->philos[i], i, data) != 0)
+			return (11);
+		i++;
+	}
+	if (pthread_create(supervisor, NULL, &supervising, (void *) data) != 0)
+		return (12);
+	return (0);
+}
+
+int	join_threads(t_data *data, pthread_t supervisor)
+{
+	int	i;
+	
+	i = 0;
+	while(i < data->n_philo)
+	{
+		if (pthread_join(data->philos[i].thr, NULL) != 0)
+			return (13);
+		i++;
+	}
+	if (pthread_join(supervisor, NULL) != 0)
+		return (14);
 	return (0);
 }
 
@@ -62,33 +117,18 @@ int	main(int argc, char *argv[])
 {
 	t_data		*data;
 	pthread_t	supervisor;
-	int			i;
 
-	if (argc < 5 || 6 < argc)
-		return (1);
+	if (intput_checker(argc, argv) != 0)
+		return (intput_checker(argc, argv));
 	data = malloc(sizeof(t_data));
 	if (data == NULL)
-		return (2);
-	if (init_data(argc, argv, data) != 0)
 		return (3);
-	i = 0;
-	while(i < data->n_philo)
-	{
-		if (init_philo(&data->philos[i], i, data) != 0)
-			return (4);
-		i++;
-	}
-	if (pthread_create(&supervisor, NULL, &supervising, (void *) data) != 0)
-		return (5);
-	i = 0;
-	while(i < data->n_philo)
-	{
-		if (pthread_join(data->philos[i].thr, NULL) != 0)
-			return (6);
-		i++;
-	}
-	if (pthread_join(supervisor, NULL) != 0)
-		return (7);
+	if (init_data(argc, argv, data) != 0)
+		return (init_data(argc, argv, data));
+	if (create_threads(data, &supervisor) != 0)
+		return (create_threads(data, &supervisor));
+	if (join_threads(data, supervisor) != 0)
+		return (join_threads(data, supervisor));
 	ft_exit(data);
 	return (0);
 }

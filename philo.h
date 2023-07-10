@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/08 12:07:49 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/10 09:49:03 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_philo
 	pthread_mutex_t	mutex_philo;
 
 	int	name;
-	int eating;
 	int	finished;
 	int	meals_eaten;
 	int fork_r;
@@ -46,7 +45,6 @@ typedef struct s_data
 	int					n_philo;
 	int					n_meals;
 	int					n_dead;
-	int					n_finished;
 	unsigned long int	t_eat;
 	unsigned long int	t_sleep;
 	unsigned long int	t_die;
@@ -61,5 +59,7 @@ void				*routine(void *arg);
 int					ft_strcmp(const char *s1, const char *s2);
 void				ft_print(t_philo *philo, char *action);
 int					check_super(t_data *data);
+int					ft_isdigit(int c);
+int					ft_atoi(const char *str);
 
 #endif
