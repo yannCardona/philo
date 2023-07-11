@@ -6,13 +6,13 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/10 16:24:26 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/11 11:28:12 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	init_mutex(t_data *data)
+/* int	init_mutex(t_data *data)
 {
 	int i;
 	
@@ -28,7 +28,7 @@ int	init_mutex(t_data *data)
 	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
 			return (7);
 	return (0);
-}
+} */
 
 int	init_data(int argc, char *argv[], t_data *data)
 {
@@ -41,26 +41,29 @@ int	init_data(int argc, char *argv[], t_data *data)
 	else
 		data->n_meals = __INT_MAX__;
 	data->n_dead = 0;
+	data->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
+	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
+			return (6);
+	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
+			return (7);
 	data->t_start = get_time();
 	return (0);
 }
 
-/* int	init_philo(t_philo *philo, int i, t_data *data)
+t_philo	*init_philo(t_data *data, int i)
 {
+	t_philo	*philo;
+
+	philo = malloc(sizeof(t_philo));
+	if (philo == NULL)
+		return (NULL);
 	philo->data = data;
-	philo->name = i + 1;
+	philo->name = i;
+	philo->dead = 0;
 	philo->finished = 0;
 	philo->meals_eaten = 0;
-	philo->fork_r = i;
-	if (i == data->n_philo - 1)
-		philo->fork_l = 0;
-	else 
-		philo->fork_l = i + 1;
 	philo->t_last_meal = get_time();
-	if (pthread_mutex_init(&philo->mutex_philo, NULL) != 0)
-			return (9);
-	if (pthread_create(&philo->thr, NULL, &routine, (void *) philo) != 0)
-		return (10);
-	return (0);
+	philo->forks = data->forks;
+
+	return (philo);
 }
- */
