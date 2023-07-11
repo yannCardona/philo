@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/11 11:28:12 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:22:41 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	init_data(int argc, char *argv[], t_data *data)
 	else
 		data->n_meals = __INT_MAX__;
 	data->n_dead = 0;
-	data->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
+	//data->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
 	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
 			return (6);
 	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
@@ -63,7 +63,7 @@ t_philo	*init_philo(t_data *data, int i)
 	philo->finished = 0;
 	philo->meals_eaten = 0;
 	philo->t_last_meal = get_time();
-	philo->forks = data->forks;
+	//philo->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
 
 	return (philo);
 }

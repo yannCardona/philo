@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/11 11:23:47 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:21:26 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <sys/wait.h> 
 
 struct s_data;
 
@@ -29,7 +30,7 @@ typedef struct s_philo
 	struct s_data	*data;
 	//pthread_t		thr;
 	//pthread_mutex_t	mutex_philo;
-	sem_t		*forks;
+	//sem_t		*forks;
 
 	int	name;
 	int	finished;
@@ -41,7 +42,7 @@ typedef struct s_philo
 typedef struct s_data
 {
 	t_philo				*philos;
-	sem_t				*forks;
+	//sem_t				*forks;
 	pthread_mutex_t		mutex_super;
 	pthread_mutex_t		mutex_write;
 
