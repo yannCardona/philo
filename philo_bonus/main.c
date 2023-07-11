@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/11 12:10:06 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/11 12:46:26 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,7 @@ void	routine(t_data *data, int i)
 		usleep(data->t_sleep * 1000);
 	}
 	sem_unlink("forks");
-	return ;
-	//exit (0);
+	return;
 }
 
 int	main(int argc, char *argv[])
@@ -131,6 +130,7 @@ int	main(int argc, char *argv[])
 		//usleep(10);
 		i++;
 	}
+	wait (&pid);
 	sem_close(data->forks);
 	//ft_exit(data);
 	return (0);
