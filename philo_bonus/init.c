@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 14:19:54 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:40:33 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,15 @@ int	init_data(int argc, char *argv[], t_data *data)
 	if (argc == 6)
 		data->n_meals = ft_atoi(argv[5]);
 	else
-		data->n_meals = __INT_MAX__;
+		data->n_meals = -1;
 	sem_unlink("forks_sem");
 	data->forks_sem = sem_open("forks_sem", O_CREAT, 0660, data->n_philo);
+	if (data->forks_sem == NULL)
+		return (5);
 	sem_unlink("print_lock");
 	data->print_lock = sem_open("print_lock", O_CREAT, 0660, 1);
+	if (data->print_lock == NULL)
+		return (6);
 	data->t_start = get_time();
 	return (0);
 }

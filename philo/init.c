@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 16:05:04 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:41:05 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	init_data(int argc, char *argv[], t_data *data)
 	if (argc == 6)
 		data->n_meals = ft_atoi(argv[5]);
 	else
-		data->n_meals = __INT_MAX__;
+		data->n_meals = -1;
 	data->n_dead = 0;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->n_philo);
 	if (data->forks == NULL)
