@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 09:28:56 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/11 10:53:18 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 13:32:56 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,23 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-int	check_super(t_data *data)
+int	check_time(t_philo *philo)
 {
 	int i;
 
 	i = 0;
-	pthread_mutex_lock(&data->mutex_super);
-	if (data->n_dead != 0)
+	pthread_mutex_lock(&philo->mutex_philo);
+	if (philo->data->t_die < get_time() - philo->t_last_meal)
 		i = 1;
-	pthread_mutex_unlock(&data->mutex_super);
+	pthread_mutex_unlock(&philo->mutex_philo);
 	return (i);
 }
 
 void	ft_print(t_philo *philo, char *action)
 {
-	pthread_mutex_lock(&philo->data->mutex_write);
+	sem_wait(philo->print_lock);
 	if (ft_strcmp(action, "die") == 0 && philo->finished != 1)
 		printf("%lu %d died\n", get_time() - philo->data->t_start, philo->name);
-	if (check_super(philo->data) == 1)
-	{
-		pthread_mutex_unlock(&philo->data->mutex_write);
-		return ;
-	}
 	if (ft_strcmp(action, "fork_r") == 0)
 		printf("%lu %d has taken a fork\n", get_time() - philo->data->t_start, philo->name);
 	if (ft_strcmp(action, "fork_l") == 0)
@@ -75,5 +70,5 @@ void	ft_print(t_philo *philo, char *action)
 		printf("%lu %d is sleeping\n", get_time() - philo->data->t_start, philo->name);
 	if (ft_strcmp(action, "think") == 0)
 		printf("%lu %d is thinking\n", get_time() - philo->data->t_start, philo->name);
-	pthread_mutex_unlock(&philo->data->mutex_write);
+	sem_post(philo->print_lock);
 }

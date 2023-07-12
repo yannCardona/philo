@@ -6,29 +6,11 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/11 16:22:41 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 13:40:39 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
-/* int	init_mutex(t_data *data)
-{
-	int i;
-	
-	i = 0;
-	while (i < data->n_philo)
-	{
-		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
-			return (5);
-		i++;
-	}
-	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
-			return (6);
-	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
-			return (7);
-	return (0);
-} */
 
 int	init_data(int argc, char *argv[], t_data *data)
 {
@@ -40,12 +22,10 @@ int	init_data(int argc, char *argv[], t_data *data)
 		data->n_meals = ft_atoi(argv[5]);
 	else
 		data->n_meals = __INT_MAX__;
-	data->n_dead = 0;
-	//data->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
-	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
-			return (6);
-	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
-			return (7);
+	sem_unlink("forks_sem");
+	data->forks_sem = sem_open("forks_sem", O_CREAT, 0660, data->n_philo);
+	sem_unlink("print_lock");
+	data->print_lock = sem_open("print_lock", O_CREAT, 0660, 1);
 	data->t_start = get_time();
 	return (0);
 }
@@ -59,11 +39,12 @@ t_philo	*init_philo(t_data *data, int i)
 		return (NULL);
 	philo->data = data;
 	philo->name = i;
-	philo->dead = 0;
 	philo->finished = 0;
 	philo->meals_eaten = 0;
 	philo->t_last_meal = get_time();
-	//philo->forks = sem_open("forks", O_CREAT, O_RDWR, data->n_philo);
-
+	if (pthread_mutex_init(&philo->mutex_philo, NULL) != 0)
+			exit (7);
+	philo->forks_sem = sem_open("forks_sem", 0);
+	philo->print_lock = sem_open("print_lock", 0);
 	return (philo);
 }
