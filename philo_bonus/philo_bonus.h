@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 13:51:57 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:19:43 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ struct s_data;
 typedef struct s_philo
 {	
 	struct s_data	*data;
+	pthread_t		supervisor;
 	pthread_mutex_t	mutex_philo;
 	sem_t			*forks_sem;
 	sem_t			*print_lock;
@@ -47,7 +48,6 @@ typedef struct s_data
 
 	int					n_philo;
 	int					n_meals;
-	int					n_dead;
 	unsigned long int	t_eat;
 	unsigned long int	t_sleep;
 	unsigned long int	t_die;
@@ -63,6 +63,7 @@ void				ft_print(t_philo *philo, char *action);
 int					check_time(t_philo *philo);
 int					ft_isdigit(int c);
 int					ft_atoi(const char *str);
-//void				routine(t_data *data, int i);
+void				routine(t_data *data, int i);
+void				*supervising(void *arg);
 
 #endif

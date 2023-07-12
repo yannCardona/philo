@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/10 16:58:14 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:13:18 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	intput_checker(int argc, char *argv[])
 	int	j;
 	
 	if (argc < 5 || 6 < argc)
+		return (1);
+	if (ft_atoi(argv[1]) == 0)
 		return (1);
 	i = 1;
 	while (i < argc)

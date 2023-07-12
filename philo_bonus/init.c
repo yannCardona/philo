@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 13:40:39 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:19:54 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ t_philo	*init_philo(t_data *data, int i)
 	philo->name = i;
 	philo->finished = 0;
 	philo->meals_eaten = 0;
-	philo->t_last_meal = get_time();
+	philo->t_last_meal = data->t_start;
+	if (pthread_create(&philo->supervisor, NULL, &supervising, philo) != 0)
+		exit (1);
 	if (pthread_mutex_init(&philo->mutex_philo, NULL) != 0)
-			exit (7);
+		exit (7);
 	philo->forks_sem = sem_open("forks_sem", 0);
 	philo->print_lock = sem_open("print_lock", 0);
 	return (philo);

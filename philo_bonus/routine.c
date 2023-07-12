@@ -5,19 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/06 09:36:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 16:12:04 by ycardona         ###   ########.fr       */
+/*   Created: 2023/07/12 13:58:36 by ycardona          #+#    #+#             */
+/*   Updated: 2023/07/12 14:24:46 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	pick_forks(t_philo *philo)
+void	*supervising(void *arg)
 {
-	pthread_mutex_lock(&(philo->data->forks[philo->fork_r]));
-	ft_print(philo, "fork_r");
-	pthread_mutex_lock(&(philo->data->forks[philo->fork_l]));
-	ft_print(philo, "fork_l");
+	t_philo	*philo;
+
+	philo = (t_philo *) arg;
+	while (1)
+	{
+		if (check_time(philo) == 1)
+		{
+			ft_print(philo, "die");
+			exit (33);
+		}
+		usleep(1);
+	}	
 	return (0);
 }
 
@@ -31,30 +39,37 @@ int	eat(t_philo *philo)
 	pthread_mutex_unlock(&philo->mutex_philo);
 	ft_print(philo, "eat");
 	usleep(philo->data->t_eat * 1000);
-	pthread_mutex_unlock(&(philo->data->forks[philo->fork_l]));
-	pthread_mutex_unlock(&(philo->data->forks[philo->fork_r]));
+	sem_post(philo->forks_sem);
+	sem_post(philo->forks_sem);
 	return (0);
 }
 
-void	*routine(void *arg)
+void	routine(t_data *data, int i)
 {
-	t_philo	*philo;
+	t_philo		*philo;
 
-	philo = (t_philo *) arg;
-	while(check_super(philo->data) == 0 && philo->finished == 0)
+	philo = init_philo(data, i);
+	while (philo->finished == 0)
 	{
 		ft_print(philo, "think");
-		if (philo->data->n_philo == 1)
-		{
-			ft_print(philo, "fork_r");
-			return (0);
-		}
-		pick_forks(philo);
+		sem_wait(philo->forks_sem);
+		ft_print(philo, "fork_r");
+		sem_wait(philo->forks_sem);
+		ft_print(philo, "fork_l");
 		eat(philo);
 		if (philo->finished == 1)
-			return (0);
-		usleep(philo->data->t_sleep * 1000);
+		{
+			sem_unlink("forks_sem");
+			exit (0);
+		}
 		ft_print(philo, "sleep");
+		usleep(data->t_sleep * 1000);
 	}
-	return (0);
+	if (pthread_join(philo->supervisor, NULL) != 0)
+		exit (1);
+	sem_unlink("forks_sem");
+	sem_unlink("print_lock");
+	pthread_mutex_destroy(&philo->mutex_philo);
+	free(philo);
+	return;
 }

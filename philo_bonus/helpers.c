@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 09:28:56 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 13:32:56 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:05:24 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ void	ft_print(t_philo *philo, char *action)
 {
 	sem_wait(philo->print_lock);
 	if (ft_strcmp(action, "die") == 0 && philo->finished != 1)
+	{
 		printf("%lu %d died\n", get_time() - philo->data->t_start, philo->name);
+		return ;
+	}
 	if (ft_strcmp(action, "fork_r") == 0)
 		printf("%lu %d has taken a fork\n", get_time() - philo->data->t_start, philo->name);
 	if (ft_strcmp(action, "fork_l") == 0)
