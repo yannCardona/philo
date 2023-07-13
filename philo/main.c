@@ -6,20 +6,20 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 16:13:18 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:26:06 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void 	ft_exit(t_data *data)
+static void	ft_exit(t_data *data)
 {
-	int i;
+	int	i;
 
 	pthread_mutex_destroy(&data->mutex_super);
 	pthread_mutex_destroy(&data->mutex_write);
 	i = 0;
-	while(i < data->n_philo)
+	while (i < data->n_philo)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
 		pthread_mutex_destroy(&data->philos[i].mutex_philo);
@@ -30,40 +30,11 @@ static void 	ft_exit(t_data *data)
 	free(data);
 }
 
-void	*supervising(void *arg)
-{
-	t_data	*data;
-	int	i;
-
-	data = (t_data *) arg;
-	while (data)
-	{
-		i = 0;
-		while (i < data->n_philo)
-		{
-			pthread_mutex_lock(&data->philos[i].mutex_philo);
-			if (data->t_die < get_time() - data->philos[i].t_last_meal)
-			{
-				pthread_mutex_lock(&data->mutex_super);
-				data->n_dead++;
-				pthread_mutex_unlock(&data->mutex_super);
-				ft_print(&data->philos[i], "die");
-				pthread_mutex_unlock(&data->philos[i].mutex_philo);
-				return (0);
-			}
-			pthread_mutex_unlock(&data->philos[i].mutex_philo);
-			i++;
-		}
-		usleep(2);
-	}
-	return (0);
-}
-
 int	intput_checker(int argc, char *argv[])
 {
 	int	i;
 	int	j;
-	
+
 	if (argc < 5 || 6 < argc)
 		return (1);
 	if (ft_atoi(argv[1]) == 0)
@@ -85,10 +56,10 @@ int	intput_checker(int argc, char *argv[])
 
 int	create_threads(t_data *data, pthread_t *supervisor)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
-	while(i < data->n_philo)
+	while (i < data->n_philo)
 	{
 		if (init_philo(&data->philos[i], i, data) != 0)
 			return (11);
@@ -102,9 +73,9 @@ int	create_threads(t_data *data, pthread_t *supervisor)
 int	join_threads(t_data *data, pthread_t supervisor)
 {
 	int	i;
-	
+
 	i = 0;
-	while(i < data->n_philo)
+	while (i < data->n_philo)
 	{
 		if (pthread_join(data->philos[i].thr, NULL) != 0)
 			return (13);

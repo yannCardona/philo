@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 15:49:33 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:41:22 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	intput_checker(int argc, char *argv[])
 {
 	int	i;
 	int	j;
-	
+
 	if (argc < 5 || 6 < argc)
 		return (1);
 	i = 1;
@@ -43,11 +43,8 @@ void	ft_fork(t_data *data, int *pid)
 	{
 		pid[i] = fork();
 		if (pid[i] == 0)
-		{
 			routine(data, i + 1);
-			exit(0);
-		}
-		i++;		
+		i++;
 		usleep(2);
 	}
 }
@@ -56,7 +53,7 @@ void	ft_wait(t_data *data, int *pid)
 {
 	int	i;
 	int	status;
-	
+
 	i = 0;
 	while (i < data->n_philo)
 	{
@@ -66,7 +63,7 @@ void	ft_wait(t_data *data, int *pid)
 			i = 0;
 			while (i < data->n_philo)
 			{
-				kill(pid[i], SIGTERM);
+				kill(pid[i], SIGKILL);
 				i++;
 			}
 		}
@@ -93,6 +90,8 @@ int	main(int argc, char *argv[])
 	ft_wait(data, pid);
 	sem_close(data->forks_sem);
 	sem_close(data->print_lock);
+	sem_unlink("forks_sem");
+	sem_unlink("print_lock");
 	free(data);
 	free(pid);
 	return (0);

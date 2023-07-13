@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 14:19:43 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:04:54 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,22 @@
 # include <sys/wait.h>
 # include <signal.h>
 
-struct s_data;
+struct	s_data;
 
 typedef struct s_philo
-{	
-	struct s_data	*data;
-	pthread_t		supervisor;
-	pthread_mutex_t	mutex_philo;
-	sem_t			*forks_sem;
-	sem_t			*print_lock;
+{
+	struct s_data		*data;
+	pthread_t			supervisor;
+	pthread_mutex_t		mutex_philo;
+	sem_t				*forks_sem;
+	sem_t				*print_lock;
 
-	int	name;
-	int	finished;
-	int	dead;
-	int	meals_eaten;
+	int					name;
+	int					finished;
+	int					dead;
+	int					meals_eaten;
 	unsigned long int	t_last_meal;
-} t_philo;
+}	t_philo;
 
 typedef struct s_data
 {
@@ -52,8 +52,7 @@ typedef struct s_data
 	unsigned long int	t_sleep;
 	unsigned long int	t_die;
 	unsigned long int	t_start;
-
-} t_data;
+}	t_data;
 
 unsigned long int	get_time(void);
 int					init_data(int argc, char *argv[], t_data *data);

@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/12 16:41:05 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:23:47 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	init_mutex(t_data *data)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (i < data->n_philo)
 	{
@@ -24,9 +24,9 @@ int	init_mutex(t_data *data)
 		i++;
 	}
 	if (pthread_mutex_init(&data->mutex_super, NULL) != 0)
-			return (6);
+		return (6);
 	if (pthread_mutex_init(&data->mutex_write, NULL) != 0)
-			return (7);
+		return (7);
 	return (0);
 }
 
@@ -66,7 +66,7 @@ int	init_philo(t_philo *philo, int i, t_data *data)
 		philo->fork_l = i + 1;
 	philo->t_last_meal = get_time();
 	if (pthread_mutex_init(&philo->mutex_philo, NULL) != 0)
-			return (9);
+		return (9);
 	if (philo->name % 2 == 0)
 		usleep(1);
 	if (pthread_create(&philo->thr, NULL, &routine, (void *) philo) != 0)
