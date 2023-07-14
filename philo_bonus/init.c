@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:48:20 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/13 17:33:52 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/14 02:14:42 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,8 @@ int	init_data(int argc, char *argv[], t_data *data)
 	return (0);
 }
 
-t_philo	*init_philo(t_data *data, int i)
+void	init_philo(t_data *data, int i, t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = malloc(sizeof(t_philo));
-	if (philo == NULL)
-		return (NULL);
 	philo->data = data;
 	philo->name = i;
 	philo->finished = 0;
@@ -52,5 +47,4 @@ t_philo	*init_philo(t_data *data, int i)
 		exit (7);
 	philo->forks_sem = sem_open("forks_sem", 0);
 	philo->print_lock = sem_open("print_lock", 0);
-	return (philo);
 }

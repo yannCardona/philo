@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 13:58:36 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/13 17:47:20 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/14 02:17:26 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,30 @@ static void	ft_exit(t_philo *philo)
 	sem_unlink("forks_sem");
 	sem_unlink("print_lock");
 	pthread_mutex_destroy(&philo->mutex_philo);
-	free(philo);
+	//free(philo);
 	exit(0);
-	return ;
 }
 
 void	routine(t_data *data, int i)
 {
-	t_philo		*philo;
+	t_philo	philo;
 
-	philo = init_philo(data, i);
-	while (philo->finished == 0)
+	init_philo(data, i, &philo);
+	while (1)
 	{
-		ft_print(philo, "think");
-		sem_wait(philo->forks_sem);
-		ft_print(philo, "fork_r");
-		sem_wait(philo->forks_sem);
-		ft_print(philo, "fork_l");
-		eat(philo);
-		if (philo->finished == 1)
-			ft_exit(philo);
-		ft_print(philo, "sleep");
+		ft_print(&philo, "think");
+		sem_wait(philo.forks_sem);
+		ft_print(&philo, "fork_r");
+		sem_wait(philo.forks_sem);
+		ft_print(&philo, "fork_l");
+		eat(&philo);
+		if (philo.finished == 1)
+			ft_exit(&philo);
+		ft_print(&philo, "sleep");
 		usleep(data->t_sleep * 1000);
 	}
-	if (pthread_join(philo->supervisor, NULL) != 0)
+	if (pthread_join(philo.supervisor, NULL) != 0)
 		exit (1);
-	ft_exit(philo);
+	ft_exit(&philo);
 	return ;
 }

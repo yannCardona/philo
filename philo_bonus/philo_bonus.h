@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/13 17:04:54 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/14 02:15:01 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_data
 
 unsigned long int	get_time(void);
 int					init_data(int argc, char *argv[], t_data *data);
-t_philo				*init_philo(t_data *data, int i);
+void				init_philo(t_data *data, int i, t_philo *philo);
 int					ft_strcmp(const char *s1, const char *s2);
 void				ft_print(t_philo *philo, char *action);
 int					check_time(t_philo *philo);
