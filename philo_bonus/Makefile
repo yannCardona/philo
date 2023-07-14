@@ -1,6 +1,6 @@
 CC = cc
 CFLAGS = -Werror -Wextra -Wall -pthread
-SRC = ${wildcard *.c}
+SRC = ft_atoi.c helpers.c init.c main.c routine.c 
 OBJ = ${SRC:.c=.o}
 
 NAME = philo_bonus

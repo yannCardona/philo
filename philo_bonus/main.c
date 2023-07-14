@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:43:46 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/13 17:41:22 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:48:11 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,19 @@ int	main(int argc, char *argv[])
 	data = malloc(sizeof(t_data));
 	if (data == NULL)
 		return (3);
+	if (init_data(argc, argv, data) != 0)
+		return (init_data(argc, argv, data));
 	pid = malloc(sizeof(pid_t) * data->n_philo);
 	if (pid == NULL)
 		return (4);
-	if (init_data(argc, argv, data) != 0)
-		return (init_data(argc, argv, data));
 	ft_fork(data, pid);
 	ft_wait(data, pid);
 	sem_close(data->forks_sem);
 	sem_close(data->print_lock);
+	sem_close(data->grab_lock);
 	sem_unlink("forks_sem");
 	sem_unlink("print_lock");
+	sem_unlink("grab_lock");
 	free(data);
 	free(pid);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: ycardona <ycardona@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 08:33:15 by ycardona          #+#    #+#             */
-/*   Updated: 2023/07/14 02:15:01 by ycardona         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:40:32 by ycardona         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	pthread_mutex_t		mutex_philo;
 	sem_t				*forks_sem;
 	sem_t				*print_lock;
+	sem_t				*grab_lock;
 
 	int					name;
 	int					finished;
@@ -45,6 +46,7 @@ typedef struct s_data
 {
 	sem_t				*forks_sem;
 	sem_t				*print_lock;
+	sem_t				*grab_lock;
 
 	int					n_philo;
 	int					n_meals;
