@@ -1,6 +1,6 @@
 # PHILOSOPHERS PROJECT
 
-![An_illustration_of_the_dining_philosophers_problem](https://github.com/yannCardona/philo/assets/119678666/fab9255d-4083-4d42-b5d2-de171e493281)
+![An_illustration_of_the_dining_philosophers_problem](https://github.com/yannCardona/philo/assets/119678666/70cc28a0-ffd2-497c-b927-5462329ce001)
 
 "Five philosophers dine together at the same table. Each philosopher has his own plate at the table. There is a fork between each plate. The dish served is a kind of spaghetti which has to be eaten with two forks. Each philosopher can only alternately think, eat and sleep. Moreover, a philosopher can only eat his spaghetti when he has both a left and right fork. Thus two forks will only be available when his two nearest neighbors are not eating. After an individual philosopher finishes eating, he will put down both forks. The problem is how to design a regimen (a concurrent algorithm) such that any philosopher will not starve."
 
